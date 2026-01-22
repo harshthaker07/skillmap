@@ -1,0 +1,7 @@
+node_modules
+.env
+build
+dist
+__pycache__
+skillmap-backend/ai_tutor/services/llm.py
+

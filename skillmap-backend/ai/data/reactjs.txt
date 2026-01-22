@@ -1,0 +1,33 @@
+Declarative Rendering Model
+React follows a declarative paradigm where developers describe the desired UI state, and React computes the minimal DOM mutations required to achieve that state. This abstraction eliminates manual DOM manipulation and reduces UI inconsistency bugs.
+
+Functional Components as Pure Functions
+A React functional component is expected to behave as a pure function with respect to its props and state. Given identical inputs, it must return identical JSX output. Side effects are explicitly separated using effect hooks.
+
+JSX Compilation and Element Creation
+JSX is compiled at build time into React.createElement calls. These calls produce lightweight JavaScript objects known as React Elements, which describe the UI tree. No actual DOM nodes are created during JSX evaluation.
+
+Virtual DOM and Fiber Architecture
+React maintains a Virtual DOM tree that mirrors the UI. The Fiber architecture enables incremental reconciliation, allowing React to pause, resume, and prioritize rendering work, improving responsiveness for complex applications.
+
+Reconciliation Algorithm
+During reconciliation, React compares the previous and next Virtual DOM trees. Nodes are matched by type and key. Changes are categorized as insertions, updates, or deletions. This process determines the minimal DOM operations required.
+
+State Ownership and Immutability
+State is locally owned by components. Direct mutation of state objects breaks React’s change detection. Immutable updates ensure predictable re-renders and allow React to efficiently detect changes.
+
+useState Hook Internals
+useState stores state in a hook linked to a Fiber node. State updates are queued and processed during rendering. Multiple updates may be batched to reduce unnecessary renders.
+
+useEffect Execution Model
+useEffect runs after DOM commit. Cleanup functions execute before subsequent effect runs or component unmount. Dependency arrays control execution frequency and prevent stale closures.
+
+Rendering Triggers
+A component re-renders when:
+Its state changes
+Its props change
+Its parent re-renders
+Re-rendering does not imply DOM updates unless differences are detected.
+
+Performance Considerations
+Excessive re-renders degrade performance. Stable keys, memoization, and component decomposition help reduce reconciliation cost.

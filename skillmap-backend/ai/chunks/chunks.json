@@ -1,0 +1,157 @@
+[
+  {
+    "id": "django.txt_0",
+    "text": "Django Request Lifecycle\nAn HTTP request enters Django through the WSGI/ASGI interface, passes through middleware layers, reaches URL routing, executes the view logic, and returns a response. Middleware enables cross-cutting concerns such as authentication and logging.",
+    "source": "django.txt"
+  },
+  {
+    "id": "django.txt_1",
+    "text": "Application Modularity\nDjango applications encapsulate domain logic. Proper app boundaries prevent tight coupling and improve maintainability in large codebases.",
+    "source": "django.txt"
+  },
+  {
+    "id": "django.txt_2",
+    "text": "ORM Abstraction Layer\nDjango ORM translates Python expressions into SQL queries. QuerySets are lazily evaluated, enabling efficient query composition and optimization.",
+    "source": "django.txt"
+  },
+  {
+    "id": "django.txt_3",
+    "text": "Database Transactions\nDjango manages database transactions implicitly. Atomic blocks ensure consistency by committing or rolling back operations as a unit.",
+    "source": "django.txt"
+  },
+  {
+    "id": "django.txt_4",
+    "text": "Django REST Framework Architecture\nDRF decouples data representation from business logic. Views orchestrate request handling, serializers manage data transformation, and renderers format responses.",
+    "source": "django.txt"
+  },
+  {
+    "id": "django.txt_5",
+    "text": "Serialization Pipeline\nSerializers validate input data, enforce schema constraints, and convert Python objects into JSON. Validation occurs before business logic execution.",
+    "source": "django.txt"
+  },
+  {
+    "id": "django.txt_6",
+    "text": "ViewSets and Routers\nViewSets consolidate CRUD operations into a single abstraction. Routers generate RESTful URL patterns automatically, enforcing consistent API structure.",
+    "source": "django.txt"
+  },
+  {
+    "id": "django.txt_7",
+    "text": "Authentication and Permissions\nDRF authentication identifies users, while permission classes enforce access control policies. These layers are evaluated before view execution.",
+    "source": "django.txt"
+  },
+  {
+    "id": "django.txt_8",
+    "text": "API Versioning and Stability\nStable APIs require versioning strategies to prevent breaking client integrations. DRF supports URL-based and header-based versioning.\n\nCORS Enforcement\nCORS policies protect APIs from unauthorized cross-origin access. Explicit configuration is required for frontend-backend communication.",
+    "source": "django.txt"
+  },
+  {
+    "id": "Docker.txt_9",
+    "text": "OS-Level Virtualization\nDocker leverages Linux kernel features such as namespaces and cgroups to provide process isolation without full virtual machines.\n\nImage Layering Model\nDocker images consist of immutable layers stacked atop each other. Each Dockerfile instruction generates a new layer.",
+    "source": "Docker.txt"
+  },
+  {
+    "id": "Docker.txt_10",
+    "text": "Copy-on-Write Filesystems\nContainers use copy-on-write filesystems, enabling efficient storage and fast startup by sharing image layers across containers.\n\nContainer Lifecycle\nContainers transition through created, running, stopped, and removed states. Runtime behavior is governed by the container runtime.",
+    "source": "Docker.txt"
+  },
+  {
+    "id": "Docker.txt_11",
+    "text": "Build Cache Optimization\nLayer caching accelerates builds. Ordering Dockerfile instructions from least to most frequently changing improves cache efficiency.\n\nMulti-Stage Builds\nMulti-stage builds separate build-time and runtime dependencies, producing smaller and more secure images.",
+    "source": "Docker.txt"
+  },
+  {
+    "id": "Docker.txt_12",
+    "text": "Docker Networking\nContainers communicate via virtual networks. DNS-based service discovery enables inter-container communication using service names.\n\nPersistent Storage\nVolumes decouple data from container lifecycles, ensuring persistence across restarts and deployments.",
+    "source": "Docker.txt"
+  },
+  {
+    "id": "Docker.txt_13",
+    "text": "Environment Configuration\nConfiguration is externalized via environment variables, enabling the same image to run across environments.\n\nProduction Considerations\nResource limits, health checks, logging, and monitoring are essential for stable containerized systems.",
+    "source": "Docker.txt"
+  },
+  {
+    "id": "rag.txt_14",
+    "text": "Limitations of Parametric Knowledge\nLLMs encode knowledge in model weights during training. This knowledge is static and cannot reflect real-time or proprietary information without retraining.",
+    "source": "rag.txt"
+  },
+  {
+    "id": "rag.txt_15",
+    "text": "Retrieval Augmented Generation Paradigm\nRAG externalizes knowledge by retrieving relevant documents at query time and injecting them into the generation context. This decouples knowledge storage from language generation.",
+    "source": "rag.txt"
+  },
+  {
+    "id": "rag.txt_16",
+    "text": "Embedding Space Geometry\nEmbeddings project text into high-dimensional vector spaces where semantic similarity corresponds to geometric proximity. Distance metrics such as cosine similarity quantify relevance.",
+    "source": "rag.txt"
+  },
+  {
+    "id": "rag.txt_17",
+    "text": "Chunk Granularity Trade-offs\nSmaller chunks improve retrieval precision but may lose context. Larger chunks preserve context but reduce retrieval accuracy. Overlapping chunks balance this trade-off.",
+    "source": "rag.txt"
+  },
+  {
+    "id": "rag.txt_18",
+    "text": "Vector Indexing\nVector databases index embeddings using approximate nearest neighbor algorithms to enable fast similarity search at scale.\n\nRetrieval Phase Mechanics\nUser queries are embedded using the same model as stored data. Top-k nearest vectors are retrieved based on similarity thresholds.",
+    "source": "rag.txt"
+  },
+  {
+    "id": "rag.txt_19",
+    "text": "Context Assembly\nRetrieved chunks are concatenated with system instructions and user queries. Token limits require careful context prioritization.\n\nGeneration Constraints\nLLMs generate responses conditioned on retrieved context. Proper prompt design ensures the model does not hallucinate beyond provided information.",
+    "source": "rag.txt"
+  },
+  {
+    "id": "rag.txt_20",
+    "text": "Knowledge Updates\nRAG allows knowledge updates by re-ingesting data without retraining the model, enabling rapid iteration and freshness.\n\nFailure Modes\nPoor chunking, irrelevant retrieval, or insufficient context lead to degraded responses. Retrieval quality directly determines generation quality.",
+    "source": "rag.txt"
+  },
+  {
+    "id": "reactjs.txt_21",
+    "text": "Declarative Rendering Model\nReact follows a declarative paradigm where developers describe the desired UI state, and React computes the minimal DOM mutations required to achieve that state. This abstraction eliminates manual DOM manipulation and reduces UI inconsistency bugs.",
+    "source": "reactjs.txt"
+  },
+  {
+    "id": "reactjs.txt_22",
+    "text": "Functional Components as Pure Functions\nA React functional component is expected to behave as a pure function with respect to its props and state. Given identical inputs, it must return identical JSX output. Side effects are explicitly separated using effect hooks.",
+    "source": "reactjs.txt"
+  },
+  {
+    "id": "reactjs.txt_23",
+    "text": "JSX Compilation and Element Creation\nJSX is compiled at build time into React.createElement calls. These calls produce lightweight JavaScript objects known as React Elements, which describe the UI tree. No actual DOM nodes are created during JSX evaluation.",
+    "source": "reactjs.txt"
+  },
+  {
+    "id": "reactjs.txt_24",
+    "text": "Virtual DOM and Fiber Architecture\nReact maintains a Virtual DOM tree that mirrors the UI. The Fiber architecture enables incremental reconciliation, allowing React to pause, resume, and prioritize rendering work, improving responsiveness for complex applications.",
+    "source": "reactjs.txt"
+  },
+  {
+    "id": "reactjs.txt_25",
+    "text": "Reconciliation Algorithm\nDuring reconciliation, React compares the previous and next Virtual DOM trees. Nodes are matched by type and key. Changes are categorized as insertions, updates, or deletions. This process determines the minimal DOM operations required.",
+    "source": "reactjs.txt"
+  },
+  {
+    "id": "reactjs.txt_26",
+    "text": "State Ownership and Immutability\nState is locally owned by components. Direct mutation of state objects breaks React\u2019s change detection. Immutable updates ensure predictable re-renders and allow React to efficiently detect changes.",
+    "source": "reactjs.txt"
+  },
+  {
+    "id": "reactjs.txt_27",
+    "text": "useState Hook Internals\nuseState stores state in a hook linked to a Fiber node. State updates are queued and processed during rendering. Multiple updates may be batched to reduce unnecessary renders.",
+    "source": "reactjs.txt"
+  },
+  {
+    "id": "reactjs.txt_28",
+    "text": "useEffect Execution Model\nuseEffect runs after DOM commit. Cleanup functions execute before subsequent effect runs or component unmount. Dependency arrays control execution frequency and prevent stale closures.",
+    "source": "reactjs.txt"
+  },
+  {
+    "id": "reactjs.txt_29",
+    "text": "Rendering Triggers\nA component re-renders when:\nIts state changes\nIts props change\nIts parent re-renders\nRe-rendering does not imply DOM updates unless differences are detected.",
+    "source": "reactjs.txt"
+  },
+  {
+    "id": "reactjs.txt_30",
+    "text": "Performance Considerations\nExcessive re-renders degrade performance. Stable keys, memoization, and component decomposition help reduce reconciliation cost.",
+    "source": "reactjs.txt"
+  }
+]

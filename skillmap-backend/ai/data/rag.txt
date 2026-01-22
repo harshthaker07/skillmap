@@ -1,0 +1,29 @@
+Limitations of Parametric Knowledge
+LLMs encode knowledge in model weights during training. This knowledge is static and cannot reflect real-time or proprietary information without retraining.
+
+Retrieval Augmented Generation Paradigm
+RAG externalizes knowledge by retrieving relevant documents at query time and injecting them into the generation context. This decouples knowledge storage from language generation.
+
+Embedding Space Geometry
+Embeddings project text into high-dimensional vector spaces where semantic similarity corresponds to geometric proximity. Distance metrics such as cosine similarity quantify relevance.
+
+Chunk Granularity Trade-offs
+Smaller chunks improve retrieval precision but may lose context. Larger chunks preserve context but reduce retrieval accuracy. Overlapping chunks balance this trade-off.
+
+Vector Indexing
+Vector databases index embeddings using approximate nearest neighbor algorithms to enable fast similarity search at scale.
+
+Retrieval Phase Mechanics
+User queries are embedded using the same model as stored data. Top-k nearest vectors are retrieved based on similarity thresholds.
+
+Context Assembly
+Retrieved chunks are concatenated with system instructions and user queries. Token limits require careful context prioritization.
+
+Generation Constraints
+LLMs generate responses conditioned on retrieved context. Proper prompt design ensures the model does not hallucinate beyond provided information.
+
+Knowledge Updates
+RAG allows knowledge updates by re-ingesting data without retraining the model, enabling rapid iteration and freshness.
+
+Failure Modes
+Poor chunking, irrelevant retrieval, or insufficient context lead to degraded responses. Retrieval quality directly determines generation quality.

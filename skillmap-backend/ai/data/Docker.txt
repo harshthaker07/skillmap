@@ -1,0 +1,29 @@
+OS-Level Virtualization
+Docker leverages Linux kernel features such as namespaces and cgroups to provide process isolation without full virtual machines.
+
+Image Layering Model
+Docker images consist of immutable layers stacked atop each other. Each Dockerfile instruction generates a new layer.
+
+Copy-on-Write Filesystems
+Containers use copy-on-write filesystems, enabling efficient storage and fast startup by sharing image layers across containers.
+
+Container Lifecycle
+Containers transition through created, running, stopped, and removed states. Runtime behavior is governed by the container runtime.
+
+Build Cache Optimization
+Layer caching accelerates builds. Ordering Dockerfile instructions from least to most frequently changing improves cache efficiency.
+
+Multi-Stage Builds
+Multi-stage builds separate build-time and runtime dependencies, producing smaller and more secure images.
+
+Docker Networking
+Containers communicate via virtual networks. DNS-based service discovery enables inter-container communication using service names.
+
+Persistent Storage
+Volumes decouple data from container lifecycles, ensuring persistence across restarts and deployments.
+
+Environment Configuration
+Configuration is externalized via environment variables, enabling the same image to run across environments.
+
+Production Considerations
+Resource limits, health checks, logging, and monitoring are essential for stable containerized systems.

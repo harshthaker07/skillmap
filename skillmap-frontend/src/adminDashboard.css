@@ -1,0 +1,158 @@
+.admin-dashboard {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 30px;
+  font-family: Arial, sans-serif;
+}
+
+/* HEADER */
+.admin-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+}
+
+.logout-btn {
+  background: #ff4d4f;
+  border: none;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.logout-btn:hover {
+  background: #e13c3c;
+}
+
+/* CARDS */
+.admin-card {
+  background: #ffffff;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+/* ASSIGN ROW */
+.assign-row {
+  display: flex;
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.assign-row select {
+  padding: 6px;
+  flex: 1;
+}
+
+.assign-btn {
+  background: #4caf50;
+  color: white;
+  border: none;
+  padding: 8px 18px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.assign-btn:hover {
+  background: #43a047;
+}
+
+/* LISTS */
+.list {
+  margin-top: 10px;
+  padding-left: 18px;
+}
+
+.list li {
+  margin-bottom: 6px;
+}
+
+/* STATUS */
+.status-msg {
+  margin-top: 12px;
+  font-weight: bold;
+}
+
+/* LOADING */
+.admin-loading {
+  padding: 40px;
+  text-align: center;
+  font-size: 18px;
+}
+
+
+.table-wrapper {
+  overflow-x: auto;
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+  font-size: 14px;
+}
+
+.admin-table th {
+  text-align: left;
+  background: #f5f7fb;
+  padding: 12px;
+  font-weight: 600;
+  color: #333;
+}
+
+.admin-table td {
+  padding: 12px;
+  border-top: 1px solid #eee;
+  vertical-align: top;
+}
+
+.admin-table tr:hover {
+  background: #fafafa;
+}
+
+/* Course pills */
+.course-pill {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  margin: 2px;
+}
+
+.course-done {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.course-pending {
+  background: #e5e7eb;
+  color: #374151;
+}
+
+/* Progress bar */
+.progress-cell {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.progress-bar {
+  width: 90px;
+  height: 8px;
+  background: #e5e7eb;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    #22c55e,
+    #16a34a
+  );
+  border-radius: 999px;
+}
