@@ -9,6 +9,7 @@ import {
   removeCourse,
 } from "../api";
 import "../adminDashboard.css";
+import CurriculumBuilder from "./CurriculumBuilder";
 
 function AdminDashboard({ onLogout }) {
   /* =========================
@@ -27,6 +28,10 @@ function AdminDashboard({ onLogout }) {
   const [editingCourse, setEditingCourse] = useState(null);
   const [editTitle, setEditTitle] = useState("");
   const [editDesc, setEditDesc] = useState("");
+
+
+
+  const [managingCourseId, setManagingCourseId] = useState(null);
 
   const [searchTerm, setSearchTerm] = useState("");
   const [progressFilter, setProgressFilter] = useState("all");
@@ -199,6 +204,16 @@ function AdminDashboard({ onLogout }) {
         </button>
       </div>
 
+      {/* CURRICULUM BUILDER OVERLAY */}
+      {managingCourseId && (
+        <div style={{ marginBottom: 30, background: "white", borderRadius: 12, boxShadow: "0 4px 12px rgba(0,0,0,0.1)" }}>
+          <CurriculumBuilder
+            courseId={managingCourseId}
+            onClose={() => setManagingCourseId(null)}
+          />
+        </div>
+      )}
+
       {/* ASSIGN COURSE */}
       <div className="admin-card">
         <h3>Assign Course</h3>
@@ -227,7 +242,7 @@ function AdminDashboard({ onLogout }) {
             ))}
           </select>
 
-          <button onClick={handleAssign} disabled={assigning}>
+          <button className="btn btn-primary" onClick={handleAssign} disabled={assigning}>
             {assigning ? "Assigning..." : "Assign"}
           </button>
         </div>
@@ -247,7 +262,7 @@ function AdminDashboard({ onLogout }) {
           value={newCourseDesc}
           onChange={(e) => setNewCourseDesc(e.target.value)}
         />
-        <button onClick={handleCreateCourse} disabled={creating}>
+        <button className="btn btn-primary" onClick={handleCreateCourse} disabled={creating}>
           {creating ? "Creating..." : "Add"}
         </button>
       </div>
@@ -295,15 +310,14 @@ function AdminDashboard({ onLogout }) {
                       {u.courses.length === 0
                         ? <span className="muted">No courses</span>
                         : u.courses.map((c) => (
-                            <span
-                              key={c.id}
-                              className={`course-pill ${
-                                c.completed ? "course-done" : "course-pending"
+                          <span
+                            key={c.id}
+                            className={`course-pill ${c.completed ? "course-done" : "course-pending"
                               }`}
-                            >
-                              {c.title}
-                            </span>
-                          ))}
+                          >
+                            {c.title}
+                          </span>
+                        ))}
                     </td>
                     <td>
                       {u.courses.length === 0
@@ -336,13 +350,16 @@ function AdminDashboard({ onLogout }) {
           {courses.map((c) => (
             <li key={c.id}>
               {c.title}
-              <button onClick={() => openEditCourse(c)}>Edit</button>
-              <button
-                className="danger-btn"
-                onClick={() => handleRemoveCourse(c.id)}
-              >
-                Remove
-              </button>
+              <div>
+                <button className="btn btn-primary btn-sm" style={{ marginRight: 8 }} onClick={() => setManagingCourseId(c.id)}>Manage Content</button>
+                <button className="btn btn-secondary btn-sm" style={{ marginRight: 8 }} onClick={() => openEditCourse(c)}>Edit</button>
+                <button
+                  className="btn btn-danger btn-sm"
+                  onClick={() => handleRemoveCourse(c.id)}
+                >
+                  Remove
+                </button>
+              </div>
             </li>
           ))}
         </ul>
@@ -361,9 +378,9 @@ function AdminDashboard({ onLogout }) {
               value={editDesc}
               onChange={(e) => setEditDesc(e.target.value)}
             />
-            <div className="modal-actions">
-              <button onClick={() => setEditingCourse(null)}>Cancel</button>
-              <button onClick={handleUpdateCourse} disabled={updating}>
+            <div className="modal-actions" style={{ display: 'flex', gap: 10, justifyContent: 'flex-end', marginTop: 20 }}>
+              <button className="btn btn-secondary" onClick={() => setEditingCourse(null)}>Cancel</button>
+              <button className="btn btn-primary" onClick={handleUpdateCourse} disabled={updating}>
                 {updating ? "Saving..." : "Save"}
               </button>
             </div>

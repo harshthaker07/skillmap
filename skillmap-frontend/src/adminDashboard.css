@@ -1,158 +1,101 @@
 .admin-dashboard {
-  max-width: 900px;
+  max-width: 1200px;
   margin: 0 auto;
-  padding: 30px;
-  font-family: Arial, sans-serif;
+  padding: 2rem;
 }
 
-/* HEADER */
 .admin-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 25px;
+  margin-bottom: 2rem;
+}
+
+.admin-header h2 {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: var(--text-main);
 }
 
 .logout-btn {
-  background: #ff4d4f;
+  background: #fee2e2;
+  color: #ef4444;
   border: none;
-  color: white;
-  padding: 8px 16px;
-  border-radius: 6px;
+  padding: 0.6rem 1.2rem;
+  border-radius: var(--radius-sm);
+  font-weight: 600;
   cursor: pointer;
 }
 
-.logout-btn:hover {
-  background: #e13c3c;
-}
-
-/* CARDS */
 .admin-card {
-  background: #ffffff;
-  border-radius: 8px;
-  padding: 20px;
-  margin-bottom: 20px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  background: var(--bg-surface);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border-light);
+  margin-bottom: 1.5rem;
 }
 
-/* ASSIGN ROW */
+.admin-card h3 {
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
+  color: var(--text-main);
+}
+
 .assign-row {
   display: flex;
-  gap: 12px;
-  margin-top: 10px;
+  gap: 1rem;
+  margin-bottom: 1rem;
 }
 
-.assign-row select {
-  padding: 6px;
-  flex: 1;
+.assign-row select,
+.admin-card input {
+  padding: 0.75rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-light);
+  background: var(--bg-app);
 }
 
-.assign-btn {
-  background: #4caf50;
+.admin-card button {
+  background: var(--primary);
   color: white;
   border: none;
-  padding: 8px 18px;
-  border-radius: 6px;
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius-sm);
+  font-weight: 600;
   cursor: pointer;
-}
-
-.assign-btn:hover {
-  background: #43a047;
-}
-
-/* LISTS */
-.list {
-  margin-top: 10px;
-  padding-left: 18px;
-}
-
-.list li {
-  margin-bottom: 6px;
-}
-
-/* STATUS */
-.status-msg {
-  margin-top: 12px;
-  font-weight: bold;
-}
-
-/* LOADING */
-.admin-loading {
-  padding: 40px;
-  text-align: center;
-  font-size: 18px;
-}
-
-
-.table-wrapper {
-  overflow-x: auto;
 }
 
 .admin-table {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 10px;
-  font-size: 14px;
 }
 
 .admin-table th {
   text-align: left;
-  background: #f5f7fb;
-  padding: 12px;
-  font-weight: 600;
-  color: #333;
+  padding: 1rem;
+  background: #f8fafc;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
 .admin-table td {
-  padding: 12px;
-  border-top: 1px solid #eee;
-  vertical-align: top;
-}
-
-.admin-table tr:hover {
-  background: #fafafa;
-}
-
-/* Course pills */
-.course-pill {
-  display: inline-block;
-  padding: 4px 10px;
-  border-radius: 999px;
-  font-size: 12px;
-  margin: 2px;
-}
-
-.course-done {
-  background: #dcfce7;
-  color: #166534;
-}
-
-.course-pending {
-  background: #e5e7eb;
-  color: #374151;
-}
-
-/* Progress bar */
-.progress-cell {
-  display: flex;
-  align-items: center;
-  gap: 8px;
+  padding: 1rem;
+  border-top: 1px solid var(--border-light);
 }
 
 .progress-bar {
-  width: 90px;
-  height: 8px;
-  background: #e5e7eb;
+  background: #e2e8f0;
+  height: 6px;
   border-radius: 999px;
+  width: 100px;
   overflow: hidden;
+  margin-right: 0.5rem;
 }
 
 .progress-fill {
+  background: var(--success);
   height: 100%;
-  background: linear-gradient(
-    90deg,
-    #22c55e,
-    #16a34a
-  );
-  border-radius: 999px;
 }

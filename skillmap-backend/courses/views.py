@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework import status
 from django.db.models import Count, Q, Sum
-from .models import Course, CourseAssignment, Topic, TopicProgress
+from .models import Course, CourseAssignment, Topic, TopicProgress, Lesson, LessonProgress, XPLog
 from .serializers import CourseSerializer, SectionSerializer, LessonSerializer
 from django.utils import timezone
 from django.db.models.functions import TruncMonth
@@ -128,32 +128,130 @@ class CompleteTopicAPIView(APIView):
                 status=400
             )
 
+from users.permissions import IsAdmin
+
 class AdminCourseAPIView(APIView):
-    permission_classes = [IsAdminUser]
+    permission_classes = [IsAdmin]
 
     def post(self, request):
-        serializer = CourseSerializer(data=request.data)
+        serializer = CourseSerializer(data=request.data, context={"request": request})
         if serializer.is_valid():
-            serializer.save(created_by=request.user)
+            serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=400)
 
 class AdminSectionAPIView(APIView):
-    permission_classes = [IsAdminUser]
+    permission_classes = [IsAdmin]
 
     def post(self, request):
-        serializer = SectionSerializer(data=request.data)
+        serializer = SectionSerializer(data=request.data, context={"request": request})
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=400)
 
 class AdminLessonAPIView(APIView):
-    permission_classes = [IsAdminUser]
+    permission_classes = [IsAdmin]
 
     def post(self, request):
-        serializer = LessonSerializer(data=request.data)
+        serializer = LessonSerializer(data=request.data, context={"request": request})
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=400)
+
+class CompleteLessonAPIView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, lesson_id):
+        try:
+            lesson = Lesson.objects.select_related("section__course").get(id=lesson_id)
+
+            # 🔐 CHECK COURSE ASSIGNMENT
+            if not CourseAssignment.objects.filter(
+                user=request.user,
+                course=lesson.section.course,
+                is_active=True
+            ).exists():
+                return Response(
+                    {"error": "You are not enrolled in this course"},
+                    status=status.HTTP_403_FORBIDDEN
+                )
+
+            progress, _ = LessonProgress.objects.get_or_create(
+                user=request.user,
+                lesson=lesson
+            )
+
+            if not progress.completed:
+                progress.completed = True
+                progress.completed_at = timezone.now()
+                progress.save()
+
+                XPLog.objects.create(
+                    user=request.user,
+                    xp=lesson.xp,
+                    reason=f"Completed lesson: {lesson.title}"
+                )
+
+            return Response(
+                {"message": "Lesson completed", "xp_earned": lesson.xp}
+            )
+
+        except Lesson.DoesNotExist:
+            return Response(
+                {"error": "Lesson not found"},
+                status=status.HTTP_404_NOT_FOUND
+            )
+
+class StudentProgressAPIView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        active_assignments = CourseAssignment.objects.filter(
+            user=request.user,
+            is_active=True,
+            course__is_active=True
+        )
+
+        course_ids = active_assignments.values_list('course_id', flat=True)
+        
+        # Calculate totals based on Lessons, not Topics
+        total_lessons = Lesson.objects.filter(
+            section__course__in=course_ids
+        ).count()
+
+        completed_lessons = LessonProgress.objects.filter(
+            user=request.user,
+            completed=True,
+            lesson__section__course__in=course_ids
+        ).count()
+
+        progress = min(
+            int((completed_lessons / total_lessons) * 100),
+            100
+        ) if total_lessons > 0 else 0
+
+        # Calculate XP from logs
+        total_xp = XPLog.objects.filter(user=request.user).aggregate(Sum('xp'))['xp__sum'] or 0
+
+        return Response({
+            "total_courses": total_lessons,
+            "completed_courses": completed_lessons,
+            "progress": progress,
+            "xp": total_xp,
+        })
+
+
+class CourseContentAPIView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, course_id):
+        try:
+            # Optimize query to fetch nested relations
+            course = Course.objects.prefetch_related("sections__lessons").get(id=course_id)
+            # Pass context for get_completed method in LessonSerializer
+            serializer = CourseSerializer(course, context={"request": request})
+            return Response(serializer.data)
+        except Course.DoesNotExist:
+            return Response({"error": "Course not found"}, status=404)

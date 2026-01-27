@@ -10,3 +10,4 @@ urlpatterns = [
     path("courses/update/<int:course_id>/", AdminCourseUpdateAPIView.as_view()),
     path("courses/remove/<int:course_id>/", AdminCourseDeactivateAPIView.as_view()),
 ]
+

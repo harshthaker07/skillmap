@@ -49,7 +49,7 @@ function Signup({ onSwitchToLogin }) {
       });
 
       setShowSuccess(true);
-      }catch (err) {
+    } catch (err) {
       if (err?.error) {
         setError(err.error);
       } else if (err?.message) {
@@ -111,41 +111,41 @@ function Signup({ onSwitchToLogin }) {
           )}
 
           <input
-            type="text"
+            className="form-input"
             placeholder="First Name"
             value={firstName}
             onChange={(e) => setFirstName(e.target.value)}
           />
 
           <input
-            type="text"
+            className="form-input"
             placeholder="Last Name"
             value={lastName}
             onChange={(e) => setLastName(e.target.value)}
           />
 
           <input
-            type="text"
+            className="form-input"
             placeholder="Username"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
           />
 
           <input
-            type="email"
+            className="form-input"
             placeholder="Email address"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
 
           <input
-            type="password"
+            className="form-input"
             placeholder="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
 
-          <button onClick={handleSignup}>Create Account</button>
+          <button className="btn btn-primary" onClick={handleSignup}>Create Account</button>
 
           <p className="footer-text">
             Already have an account?{" "}

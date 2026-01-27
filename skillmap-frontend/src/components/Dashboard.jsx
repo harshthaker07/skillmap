@@ -337,12 +337,14 @@
 
 // export default Dashboard;
 
+
 import { useEffect, useState } from "react";
 import "../dashboard.css";
 
 import ProfileCard from "./ProfileCard";
 import Chatbot from "./Chatbot";
 import ProgressChart from "./ProgressChart";
+import CourseChecklist from "./CourseChecklist";
 
 import {
   getProfile,
@@ -375,6 +377,7 @@ function Dashboard({ onLogout }) {
 
   // Course completion
   const [completingId, setCompletingId] = useState(null);
+  const [selectedCourse, setSelectedCourse] = useState(null);
 
   /* =========================
      FETCH DASHBOARD DATA
@@ -530,38 +533,43 @@ function Dashboard({ onLogout }) {
           <div className="card">
             <h2 className="section-title">My Courses</h2>
 
-            {courses.length === 0 ? (
-              <p>No courses assigned yet</p>
-            ) : (
-              courses.map((course) => (
-                <div
-                  key={course.id}
-                  className="course-item"
-                  style={{
-                    opacity: course.completed ? 0.6 : 1,
+            {selectedCourse ? (
+              <div className="checklist-wrapper">
+                <CourseChecklist
+                  courseId={selectedCourse}
+                  onClose={() => setSelectedCourse(null)}
+                  onProgressUpdate={async () => {
+                    const updatedStats = await getStudentProgress();
+                    setStats(updatedStats);
+                    // Also refresh course list to check for course completion if needed
+                    const updatedCourses = await getMyCourses();
+                    setCourses(updatedCourses);
                   }}
-                >
-                  <span>{course.title}</span>
+                />
+              </div>
+            ) : (
+              courses.length === 0 ? (
+                <p>No courses assigned yet</p>
+              ) : (
+                courses.map((course) => (
+                  <div
+                    key={course.id}
+                    className="course-item"
+                    style={{
+                      opacity: course.completed ? 0.6 : 1,
+                    }}
+                  >
+                    <span>{course.title}</span>
 
-                  {course.completed ? (
-                    <span className="completed-pill">
-                      Completed
-                    </span>
-                  ) : (
                     <button
-                      disabled={completingId === course.id}
-                      onClick={() =>
-                        handleComplete(course.id)
-                      }
+                      className="btn btn-primary btn-sm"
+                      onClick={() => setSelectedCourse(course.id)}
                     >
-                      {completingId === course.id
-                        ? "Completing..."
-                        : "Complete"}
+                      {course.completed ? "Review" : "Continue"}
                     </button>
-                  )}
-                </div>
-              ))
-            )}
+                  </div>
+                ))
+              ))}
           </div>
 
           {/* PROGRESS CHART */}
@@ -570,11 +578,8 @@ function Dashboard({ onLogout }) {
               Learning Progress
             </h2>
             <ProgressChart
-              completed={
-                courses.filter((c) => c.completed)
-                  .length
-              }
-              total={courses.length || 1}
+              completed={stats.completed_courses}
+              total={stats.total_courses}
             />
           </div>
         </div>
@@ -655,7 +660,7 @@ function Dashboard({ onLogout }) {
 
             <div className="modal-actions">
               <button
-                className="btn-secondary"
+                className="btn btn-secondary"
                 onClick={() =>
                   setIsEditing(false)
                 }
@@ -664,7 +669,7 @@ function Dashboard({ onLogout }) {
               </button>
 
               <button
-                className="btn-primary"
+                className="btn btn-primary"
                 onClick={handleSaveProfile}
               >
                 Save Changes

@@ -17,7 +17,7 @@ class LessonSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Lesson
-        fields = ["id", "title", "xp", "completed"]
+        fields = ["id", "title", "xp", "completed", "section", "order"]
 
     def get_completed(self, obj):
         user = self.context["request"].user
@@ -30,7 +30,7 @@ class SectionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Section
-        fields = ["id", "title", "lessons"]
+        fields = ["id", "title", "lessons", "course", "order"]
 
 class CourseSerializer(serializers.ModelSerializer):
     sections = SectionSerializer(many=True, read_only=True)

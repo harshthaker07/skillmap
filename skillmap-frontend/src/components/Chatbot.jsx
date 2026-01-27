@@ -194,31 +194,53 @@ function Chatbot() {
       </div>
 
       {open && (
-        <div className="chatbot-panel">
-          <div className="chatbot-header">
-            AI Tutor
-            <span onClick={() => setOpen(false)}>
+        <div className="chatbot-panel" style={{ border: 'none', boxShadow: '0 20px 40px rgba(0,0,0,0.15)' }}>
+          <div className="chatbot-header" style={{ padding: '16px 20px', background: 'linear-gradient(135deg, var(--primary), var(--secondary))' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <span style={{ fontSize: '1.2rem' }}>🤖</span>
+              <span style={{ fontWeight: '600', letterSpacing: '0.02em' }}>AI Tutor</span>
+            </div>
+            <span
+              style={{ cursor: "pointer", opacity: 0.8, fontSize: '1.2rem' }}
+              onClick={() => setOpen(false)}
+            >
               ✕
             </span>
           </div>
 
-          <div className="chatbot-body">
+          <div className="chatbot-body" style={{ background: '#f8fafc', padding: '20px' }}>
             {messages.map((m, i) => (
               <div
                 key={i}
                 className={`chat-msg ${m.role}`}
+                style={{
+                  maxWidth: '80%',
+                  padding: '12px 16px',
+                  borderRadius: '12px',
+                  marginBottom: '12px',
+                  fontSize: '0.95rem',
+                  lineHeight: '1.5',
+                  boxShadow: m.role === 'bot' ? '0 2px 4px rgba(0,0,0,0.05)' : 'none',
+                  background: m.role === 'bot' ? 'white' : 'var(--primary)',
+                  color: m.role === 'bot' ? 'var(--text-main)' : 'white',
+                  alignSelf: m.role === 'bot' ? 'flex-start' : 'flex-end',
+                  borderBottomLeftRadius: m.role === 'bot' ? '2px' : '12px',
+                  borderBottomRightRadius: m.role === 'user' ? '2px' : '12px',
+                  marginLeft: m.role === 'user' ? 'auto' : '0',
+                  marginRight: m.role === 'bot' ? 'auto' : '0'
+                }}
               >
                 {m.text}
               </div>
             ))}
             {loading && (
-              <div className="chat-msg bot">
+              <div className="chat-msg bot" style={{ background: 'white', color: '#64748b', fontStyle: 'italic' }}>
                 Thinking...
               </div>
             )}
           </div>
 
-          <div className="chat-input">
+          <div className="chat-input" style={{ padding: '16px', background: 'white', borderTop: '1px solid #e2e8f0' }}>
             <input
               value={input}
               onChange={(e) =>
@@ -227,10 +249,11 @@ function Chatbot() {
               onKeyDown={(e) =>
                 e.key === "Enter" && sendMessage()
               }
-              placeholder="Ask something..."
+              placeholder="Ask a question..."
+              style={{ background: '#f1f5f9', border: 'none', padding: '12px 16px', borderRadius: '12px' }}
             />
-            <button onClick={sendMessage}>
-              Send
+            <button className="btn btn-primary" onClick={sendMessage} style={{ borderRadius: '12px', padding: '12px 16px' }}>
+              ➤
             </button>
           </div>
         </div>

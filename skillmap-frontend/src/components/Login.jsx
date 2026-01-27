@@ -20,8 +20,8 @@ function Login({ onLogin, onSwitchToSignup }) {
 
       if (data.access && data.refresh) {
         // ✅ STORE TOKENS ONLY
-        localStorage.setItem("access", data.access);
-        localStorage.setItem("refresh", data.refresh);
+        sessionStorage.setItem("access", data.access);
+        sessionStorage.setItem("refresh", data.refresh);
 
         // ❌ DO NOT STORE ROLE
         // localStorage.setItem("role", data.role);
@@ -57,6 +57,7 @@ function Login({ onLogin, onSwitchToSignup }) {
           <input
             type="text"
             placeholder="Username"
+            className="form-input"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
           />
@@ -64,11 +65,12 @@ function Login({ onLogin, onSwitchToSignup }) {
           <input
             type="password"
             placeholder="Password"
+            className="form-input"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
 
-          <button onClick={handleLogin}>Login</button>
+          <button className="btn btn-primary" onClick={handleLogin}>Login</button>
 
           <p className="footer-text">
             New to SkillMap?{" "}

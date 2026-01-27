@@ -15,7 +15,7 @@ function App() {
      BOOTSTRAP AUTH (ON LOAD)
   ========================= */
   const bootstrapAuth = async () => {
-    const access = localStorage.getItem("access");
+    const access = sessionStorage.getItem("access");
 
     if (!access) {
       setLoading(false);

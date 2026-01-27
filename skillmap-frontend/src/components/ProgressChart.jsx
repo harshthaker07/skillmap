@@ -46,9 +46,7 @@ function ProgressChart({ completed, total }) {
           marginTop: -10,
         }}
       >
-        {Math.round(
-          (completed / total) * 100
-        )}
+        {total > 0 ? Math.round((completed / total) * 100) : 0}
         % Completed
       </p>
     </div>

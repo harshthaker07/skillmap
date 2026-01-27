@@ -6,7 +6,7 @@ from django.contrib.auth import get_user_model
 # from ai_tutor.permissions import IsAdmin
 from users.permissions import IsAdmin
 from .serializers import CourseSerializer, CourseAssignmentSerializer
-from courses.models import Course, CourseAssignment, TopicProgress
+from courses.models import Course, CourseAssignment, TopicProgress, Lesson, LessonProgress
 
 User = get_user_model()
 
@@ -131,25 +131,39 @@ class AdminUsersProgressAPIView(APIView):
                 course__is_active=True
             )
 
-            total = assignments.count()
+            # Retrieve list of course IDs for this user
+            course_ids = assignments.values_list('course_id', flat=True)
 
-            completed = TopicProgress.objects.filter(
+            # Total lessons in these courses
+            total_lessons = Lesson.objects.filter(
+                section__course__in=course_ids
+            ).count()
+
+            # Completed lessons by this user in these courses
+            completed_lessons = LessonProgress.objects.filter(
                 user=user,
                 completed=True,
-                topic__course__in=assignments.values("course")
-            ).values("topic__course").distinct().count()
+                lesson__section__course__in=course_ids
+            ).count()
 
+            # Progress calculation
             progress = int(
-                (completed / total) * 100
-            ) if total > 0 else 0
+                (completed_lessons / total_lessons) * 100
+            ) if total_lessons > 0 else 0
 
             courses = []
             for a in assignments:
-                is_completed = TopicProgress.objects.filter(
-                    user=user,
-                    completed=True,
-                    topic__course=a.course
-                ).exists()
+                # Check if course is fully completed (simplistic check: user completed all lessons in it)
+                # Or we can stick to previous logic if needed. Let's check lesson completion for this specific course.
+                
+                c_total = Lesson.objects.filter(section__course=a.course).count()
+                c_done = LessonProgress.objects.filter(
+                    user=user, 
+                    completed=True, 
+                    lesson__section__course=a.course
+                ).count()
+                
+                is_completed = (c_total > 0 and c_total == c_done)
 
                 courses.append({
                     "id": a.course.id,
