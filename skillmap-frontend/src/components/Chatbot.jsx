@@ -123,138 +123,188 @@
 // export default Chatbot;
 
 
-import { useState } from "react";
+
+import { useState, useRef, useEffect } from "react";
 import "../dashboard.css";
 import { refreshAccessToken } from "../api";
 
 function Chatbot() {
   const [open, setOpen] = useState(false);
   const [messages, setMessages] = useState([
-    { role: "bot", text: "Hi 👋 I’m your AI Tutor!" },
+    { id: 1, role: "bot", text: "Hi 👋 I’m your AI Tutor!" },
   ]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const sendMessage = async () => {
-    if (!input.trim()) return;
+  const bottomRef = useRef(null);
+  const msgId = useRef(2);
 
-    const text = input;
+  /* =========================
+     AUTO SCROLL
+  ========================= */
+  useEffect(() => {
+    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages, loading]);
+
+  /* =========================
+     SEND MESSAGE
+  ========================= */
+  const sendMessage = async () => {
+    if (!input.trim() || loading) return;
+
+    const userText = input.trim();
     setInput("");
-    setMessages((m) => [...m, { role: "user", text }]);
+
+    // 1️⃣ Add user message
+    setMessages((prev) => [
+      ...prev,
+      { id: msgId.current++, role: "user", text: userText },
+    ]);
+
     setLoading(true);
 
-    const request = async (token) =>
-      fetch("http://127.0.0.1:8000/api/ai/chat/", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ message: text }),
-      });
-
     try {
-      let token = localStorage.getItem("access");
-      let res = await request(token);
+      const makeRequest = async (token) =>
+        fetch("http://127.0.0.1:8000/api/ai/chat/", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ message: userText }),
+        });
 
-      // 🔁 Auto-refresh on expiry
+      let token = sessionStorage.getItem("access");
+      let res = await makeRequest(token);
+
       if (res.status === 401) {
         token = await refreshAccessToken();
         if (!token) throw new Error("Session expired");
-        res = await request(token);
+        res = await makeRequest(token);
       }
 
       const data = await res.json();
 
-      setMessages((m) => [
-        ...m,
-        { role: "bot", text: data.reply },
-      ]);
+      if (data?.reply?.trim()) {
+        setMessages((prev) => [
+          ...prev,
+          {
+            id: msgId.current++,
+            role: "bot",
+            text: data.reply.trim(),
+          },
+        ]);
+      }
     } catch {
-      setMessages((m) => [
-        ...m,
-        {
-          role: "bot",
-          text:
-            "Your session expired. Please login again.",
-        },
-      ]);
+      setMessages((prev) => {
+        const last = prev[prev.length - 1];
+        if (last?.text?.includes("session expired")) return prev;
+
+        return [
+          ...prev,
+          {
+            id: msgId.current++,
+            role: "bot",
+            text: "Your session expired. Please login again.",
+          },
+        ];
+      });
     } finally {
       setLoading(false);
     }
   };
 
+  /* =========================
+     UI
+  ========================= */
   return (
     <>
+      {/* CHAT BUTTON */}
       <div
         className="chatbot-circle"
-        onClick={() => setOpen(!open)}
+        onClick={() => setOpen((o) => !o)}
+        title="AI Tutor"
       >
         🤖
       </div>
 
       {open && (
-        <div className="chatbot-panel" style={{ border: 'none', boxShadow: '0 20px 40px rgba(0,0,0,0.15)' }}>
-          <div className="chatbot-header" style={{ padding: '16px 20px', background: 'linear-gradient(135deg, var(--primary), var(--secondary))' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <span style={{ fontSize: '1.2rem' }}>🤖</span>
-              <span style={{ fontWeight: '600', letterSpacing: '0.02em' }}>AI Tutor</span>
-            </div>
-            <span
-              style={{ cursor: "pointer", opacity: 0.8, fontSize: '1.2rem' }}
-              onClick={() => setOpen(false)}
-            >
-              ✕
-            </span>
-          </div>
-
-          <div className="chatbot-body" style={{ background: '#f8fafc', padding: '20px' }}>
-            {messages.map((m, i) => (
-              <div
-                key={i}
-                className={`chat-msg ${m.role}`}
-                style={{
-                  maxWidth: '80%',
-                  padding: '12px 16px',
-                  borderRadius: '12px',
-                  marginBottom: '12px',
-                  fontSize: '0.95rem',
-                  lineHeight: '1.5',
-                  boxShadow: m.role === 'bot' ? '0 2px 4px rgba(0,0,0,0.05)' : 'none',
-                  background: m.role === 'bot' ? 'white' : 'var(--primary)',
-                  color: m.role === 'bot' ? 'var(--text-main)' : 'white',
-                  alignSelf: m.role === 'bot' ? 'flex-start' : 'flex-end',
-                  borderBottomLeftRadius: m.role === 'bot' ? '2px' : '12px',
-                  borderBottomRightRadius: m.role === 'user' ? '2px' : '12px',
-                  marginLeft: m.role === 'user' ? 'auto' : '0',
-                  marginRight: m.role === 'bot' ? 'auto' : '0'
-                }}
+        <div className="chatbot-wrapper">
+          <div className="chatbot-panel">
+            {/* HEADER */}
+            <div className="chatbot-header">
+              <div style={{ display: "flex", gap: 8 }}>
+                <span>🤖</span>
+                <strong>AI Tutor</strong>
+              </div>
+              <span
+                style={{ cursor: "pointer", fontSize: "1.2rem" }}
+                onClick={() => setOpen(false)}
               >
-                {m.text}
-              </div>
-            ))}
-            {loading && (
-              <div className="chat-msg bot" style={{ background: 'white', color: '#64748b', fontStyle: 'italic' }}>
-                Thinking...
-              </div>
-            )}
-          </div>
+                ✕
+              </span>
+            </div>
 
-          <div className="chat-input" style={{ padding: '16px', background: 'white', borderTop: '1px solid #e2e8f0' }}>
-            <input
-              value={input}
-              onChange={(e) =>
-                setInput(e.target.value)
-              }
-              onKeyDown={(e) =>
-                e.key === "Enter" && sendMessage()
-              }
-              placeholder="Ask a question..."
-              style={{ background: '#f1f5f9', border: 'none', padding: '12px 16px', borderRadius: '12px' }}
-            />
-            <button className="btn btn-primary" onClick={sendMessage} style={{ borderRadius: '12px', padding: '12px 16px' }}>
-              ➤
-            </button>
+            {/* BODY */}
+            <div className="chatbot-body">
+              {messages.map((m) => (
+                <div
+                  key={m.id}
+                  style={{
+                    maxWidth: "80%",
+                    padding: "12px 16px",
+                    borderRadius: 12,
+                    marginBottom: 12,
+                    background:
+                      m.role === "bot" ? "#ffffff" : "var(--primary)",
+                    color:
+                      m.role === "bot"
+                        ? "var(--text-main)"
+                        : "#ffffff",
+                    alignSelf:
+                      m.role === "bot"
+                        ? "flex-start"
+                        : "flex-end",
+                    marginLeft: m.role === "user" ? "auto" : 0,
+                  }}
+                >
+                  {m.text}
+                </div>
+              ))}
+
+              {loading && (
+                <div
+                  style={{
+                    fontStyle: "italic",
+                    color: "#64748b",
+                    marginBottom: 12,
+                  }}
+                >
+                  Thinking…
+                </div>
+              )}
+
+              <div ref={bottomRef} />
+            </div>
+
+            {/* INPUT */}
+            <div className="chat-input">
+              <input
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                onKeyDown={(e) =>
+                  e.key === "Enter" && sendMessage()
+                }
+                placeholder="Ask a question..."
+              />
+              <button
+                className="btn btn-primary"
+                onClick={sendMessage}
+                disabled={loading}
+              >
+                ➤
+              </button>
+            </div>
           </div>
         </div>
       )}
