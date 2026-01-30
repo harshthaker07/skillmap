@@ -9,8 +9,9 @@ class ProfileAdmin(admin.ModelAdmin):
     list_display = ("user", "designation","skills")
     search_fields = ("user__username", "user__email","user__skills  ")
 
+
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
-    list_display = ("username", "email", "is_active", "is_staff")
-    search_fields = ("username", "email")
+    list_display = ("username", "email", "role", "is_active", "is_staff")
+    search_fields = ("username", "email", "role")
 

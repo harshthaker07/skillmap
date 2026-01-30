@@ -1,3 +1,126 @@
+.modern-dashboard {
+  background: var(--bg-app);
+  min-height: 100vh;
+  padding-bottom: 2rem;
+}
+
+.modern-navbar {
+  background: var(--bg-surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  margin-bottom: 2.5rem;
+  padding: 1.2rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modern-stats {
+  display: flex;
+  gap: 2.5rem;
+  margin-bottom: 2.5rem;
+}
+
+.modern-stat-box {
+  background: var(--bg-surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-xs);
+  padding: 1.5rem 2.5rem;
+  min-width: 160px;
+  text-align: center;
+}
+
+.modern-dashboard-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 2.5rem;
+  align-items: start;
+}
+
+.modern-left-col {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+}
+
+.modern-card {
+  background: var(--bg-surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  padding: 2rem 2.5rem;
+  margin-bottom: 0;
+}
+
+.modern-section-title {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--primary);
+  margin-bottom: 1.5rem;
+}
+
+.modern-course-item {
+  border-bottom: 1px solid var(--border-light);
+  padding: 1rem 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.modern-course-item:last-child {
+  border-bottom: none;
+}
+.modern-completed-pill {
+  background: #dcfce7;
+  color: #166534;
+  font-size: 0.8rem;
+  padding: 0.3rem 0.9rem;
+  border-radius: 999px;
+  font-weight: 600;
+}
+
+.modern-analytics-row {
+  display: flex;
+  gap: 2rem;
+  margin-top: 2.5rem;
+}
+.modern-analytics-card {
+  background: var(--bg-surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-xs);
+  padding: 1.2rem 1.5rem;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.modern-profile-card {
+  min-height: 420px;
+}
+
+.modern-dashboard-loading,
+.modern-dashboard-error {
+  padding: 3rem;
+  text-align: center;
+  font-size: 1.2rem;
+  color: var(--primary);
+}
+
+@media (max-width: 900px) {
+  .modern-dashboard-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  .modern-stats {
+    flex-direction: column;
+    gap: 1.2rem;
+  }
+  .modern-card, .modern-analytics-card {
+    padding: 1.2rem;
+  }
+  .modern-analytics-row {
+    flex-direction: column;
+    gap: 1.2rem;
+  }
+}
 /* Dashboard specific styles */
 .dashboard {
   min-height: 100vh;

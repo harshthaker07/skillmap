@@ -4,8 +4,10 @@ from django.conf import settings
 
 
 class User(AbstractUser):
+
     ROLE_CHOICES = (
         ("admin", "Admin"),
+        ("instructor", "Instructor"),
         ("student", "Student"),
     )
 

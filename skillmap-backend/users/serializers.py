@@ -18,18 +18,23 @@ class SignupSerializer(serializers.ModelSerializer):
         ]
     )
 
+
+    role = serializers.ChoiceField(choices=User.ROLE_CHOICES, default="student")
+
     class Meta:
         model = User
-        fields = ["username", "email", "password"]
+        fields = ["username", "email", "password", "role"]
         extra_kwargs = {
             "password": {"write_only": True}
         }
 
     def create(self, validated_data):
+        role = validated_data.get("role", "student")
         user = User.objects.create_user(
             username=validated_data["username"],
             email=validated_data["email"],
             password=validated_data["password"],
+            role=role,
         )
         return user
 

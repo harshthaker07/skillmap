@@ -197,7 +197,7 @@ function AdminDashboard({ onLogout }) {
   return (
     <div className="admin-dashboard">
       {/* HEADER */}
-      <div className="admin-header">
+      <div className="admin-header modern-header">
         <h2>Admin Dashboard</h2>
         <button className="logout-btn" onClick={onLogout}>
           Logout
@@ -206,7 +206,7 @@ function AdminDashboard({ onLogout }) {
 
       {/* CURRICULUM BUILDER OVERLAY */}
       {managingCourseId && (
-        <div style={{ marginBottom: 30, background: "white", borderRadius: 12, boxShadow: "0 4px 12px rgba(0,0,0,0.1)" }}>
+        <div className="modern-section">
           <CurriculumBuilder
             courseId={managingCourseId}
             onClose={() => setManagingCourseId(null)}
@@ -214,155 +214,160 @@ function AdminDashboard({ onLogout }) {
         </div>
       )}
 
-      {/* ASSIGN COURSE */}
-      <div className="admin-card">
-        <h3>Assign Course</h3>
-        <div className="assign-row">
-          <select
-            value={selectedUser}
-            onChange={(e) => setSelectedUser(e.target.value)}
-          >
-            <option value="">User</option>
-            {users.map((u) => (
-              <option key={u.id} value={u.id}>
-                {u.username}
-              </option>
-            ))}
-          </select>
+      <div className="modern-grid">
+        <div className="modern-col">
+          {/* ASSIGN COURSE */}
+          <div className="admin-card modern-card">
+            <h3>Assign Course</h3>
+            <div className="assign-row">
+              <select
+                value={selectedUser}
+                onChange={(e) => setSelectedUser(e.target.value)}
+              >
+                <option value="">User</option>
+                {users.map((u) => (
+                  <option key={u.id} value={u.id}>
+                    {u.username}
+                  </option>
+                ))}
+              </select>
 
-          <select
-            value={selectedCourse}
-            onChange={(e) => setSelectedCourse(e.target.value)}
-          >
-            <option value="">Course</option>
-            {courses.map((c) => (
-              <option key={c.id} value={c.id}>
-                {c.title}
-              </option>
-            ))}
-          </select>
+              <select
+                value={selectedCourse}
+                onChange={(e) => setSelectedCourse(e.target.value)}
+              >
+                <option value="">Course</option>
+                {courses.map((c) => (
+                  <option key={c.id} value={c.id}>
+                    {c.title}
+                  </option>
+                ))}
+              </select>
 
-          <button className="btn btn-primary" onClick={handleAssign} disabled={assigning}>
-            {assigning ? "Assigning..." : "Assign"}
-          </button>
+              <button className="btn btn-primary" onClick={handleAssign} disabled={assigning}>
+                {assigning ? "Assigning..." : "Assign"}
+              </button>
+            </div>
+            {message && <p className="status-msg">{message}</p>}
+          </div>
+
+          {/* CREATE COURSE */}
+          <div className="admin-card modern-card">
+            <h3>Add Course</h3>
+            <input
+              placeholder="Title"
+              value={newCourseTitle}
+              onChange={(e) => setNewCourseTitle(e.target.value)}
+            />
+            <input
+              placeholder="Description"
+              value={newCourseDesc}
+              onChange={(e) => setNewCourseDesc(e.target.value)}
+            />
+            <button className="btn btn-primary" onClick={handleCreateCourse} disabled={creating}>
+              {creating ? "Creating..." : "Add"}
+            </button>
+          </div>
+
+          {/* COURSES */}
+          <div className="admin-card modern-card">
+            <h3>Courses</h3>
+            <ul className="list">
+              {courses.map((c) => (
+                <li key={c.id} className="modern-list-item">
+                  <span className="modern-course-title">{c.title}</span>
+                  <div>
+                    <button className="btn btn-primary btn-sm" style={{ marginRight: 8 }} onClick={() => setManagingCourseId(c.id)}>Manage Content</button>
+                    <button className="btn btn-secondary btn-sm" style={{ marginRight: 8 }} onClick={() => openEditCourse(c)}>Edit</button>
+                    <button
+                      className="btn btn-danger btn-sm"
+                      onClick={() => handleRemoveCourse(c.id)}
+                    >
+                      Remove
+                    </button>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
-        {message && <p className="status-msg">{message}</p>}
-      </div>
 
-      {/* CREATE COURSE */}
-      <div className="admin-card">
-        <h3>Add Course</h3>
-        <input
-          placeholder="Title"
-          value={newCourseTitle}
-          onChange={(e) => setNewCourseTitle(e.target.value)}
-        />
-        <input
-          placeholder="Description"
-          value={newCourseDesc}
-          onChange={(e) => setNewCourseDesc(e.target.value)}
-        />
-        <button className="btn btn-primary" onClick={handleCreateCourse} disabled={creating}>
-          {creating ? "Creating..." : "Add"}
-        </button>
-      </div>
+        <div className="modern-col">
+          {/* USER PROGRESS */}
+          <div className="admin-card modern-card">
+            <h3>User Progress</h3>
 
-      {/* USER PROGRESS */}
-      <div className="admin-card">
-        <h3>User Progress</h3>
+            <div className="filter-row">
+              <input
+                placeholder="Search user/email"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+              <select
+                value={progressFilter}
+                onChange={(e) => setProgressFilter(e.target.value)}
+              >
+                <option value="all">All</option>
+                <option value="not_started">0%</option>
+                <option value="in_progress">In progress</option>
+                <option value="completed">100%</option>
+              </select>
+            </div>
 
-        <div className="filter-row">
-          <input
-            placeholder="Search user/email"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-          <select
-            value={progressFilter}
-            onChange={(e) => setProgressFilter(e.target.value)}
-          >
-            <option value="all">All</option>
-            <option value="not_started">0%</option>
-            <option value="in_progress">In progress</option>
-            <option value="completed">100%</option>
-          </select>
-        </div>
-
-        <div className="table-wrapper">
-          <table className="admin-table">
-            <thead>
-              <tr>
-                <th>User</th>
-                <th>Email</th>
-                <th>Courses</th>
-                <th>Completed</th>
-                <th>Progress</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredUsers.map((u) => {
-                const done = u.courses.filter((c) => c.completed).length;
-                return (
-                  <tr key={u.id}>
-                    <td><strong>{u.username}</strong></td>
-                    <td>{u.email}</td>
-                    <td>
-                      {u.courses.length === 0
-                        ? <span className="muted">No courses</span>
-                        : u.courses.map((c) => (
-                          <span
-                            key={c.id}
-                            className={`course-pill ${c.completed ? "course-done" : "course-pending"
-                              }`}
-                          >
-                            {c.title}
-                          </span>
-                        ))}
-                    </td>
-                    <td>
-                      {u.courses.length === 0
-                        ? "0 / 0"
-                        : `${done} / ${u.courses.length}`}
-                    </td>
-                    <td>
-                      <div className="progress-cell">
-                        <div className="progress-bar">
-                          <div
-                            className="progress-fill"
-                            style={{ width: `${u.progress}%` }}
-                          />
-                        </div>
-                        <span>{u.progress}%</span>
-                      </div>
-                    </td>
+            <div className="table-wrapper">
+              <table className="admin-table">
+                <thead>
+                  <tr>
+                    <th>User</th>
+                    <th>Email</th>
+                    <th>Courses</th>
+                    <th>Completed</th>
+                    <th>Progress</th>
                   </tr>
-                );
-              })}
-            </tbody>
-          </table>
+                </thead>
+                <tbody>
+                  {filteredUsers.map((u) => {
+                    const done = u.courses.filter((c) => c.completed).length;
+                    return (
+                      <tr key={u.id}>
+                        <td><strong>{u.username}</strong></td>
+                        <td>{u.email}</td>
+                        <td>
+                          {u.courses.length === 0
+                            ? <span className="muted">No courses</span>
+                            : u.courses.map((c) => (
+                              <span
+                                key={c.id}
+                                className={`course-pill ${c.completed ? "course-done" : "course-pending"}`}
+                              >
+                                {c.title}
+                              </span>
+                            ))}
+                        </td>
+                        <td>
+                          {u.courses.length === 0
+                            ? "0 / 0"
+                            : `${done} / ${u.courses.length}`}
+                        </td>
+                        <td>
+                          <div className="progress-cell">
+                            <div className="progress-bar">
+                              <div
+                                className="progress-fill"
+                                style={{ width: `${u.progress}%` }}
+                              />
+                            </div>
+                            <span>{u.progress}%</span>
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          </div>
         </div>
-      </div>
-
-      {/* COURSES */}
-      <div className="admin-card">
-        <h3>Courses</h3>
-        <ul className="list">
-          {courses.map((c) => (
-            <li key={c.id}>
-              {c.title}
-              <div>
-                <button className="btn btn-primary btn-sm" style={{ marginRight: 8 }} onClick={() => setManagingCourseId(c.id)}>Manage Content</button>
-                <button className="btn btn-secondary btn-sm" style={{ marginRight: 8 }} onClick={() => openEditCourse(c)}>Edit</button>
-                <button
-                  className="btn btn-danger btn-sm"
-                  onClick={() => handleRemoveCourse(c.id)}
-                >
-                  Remove
-                </button>
-              </div>
-            </li>
-          ))}
-        </ul>
       </div>
 
       {/* EDIT MODAL */}

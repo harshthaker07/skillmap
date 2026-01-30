@@ -85,6 +85,8 @@ def SignupAPIView(request):
     username = request.data.get("username")
     email = request.data.get("email")
     password = request.data.get("password")
+
+    role = request.data.get("role", "student")
     first_name = request.data.get("first_name", "")
     last_name = request.data.get("last_name", "")
 
@@ -106,12 +108,13 @@ def SignupAPIView(request):
             status=400
         )
 
+
     user = User.objects.create_user(
         username=username,
         email=email,
-        password=password
+        password=password,
+        role=role
     )
-
     user.first_name = first_name
     user.last_name = last_name
     user.save()

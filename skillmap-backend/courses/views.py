@@ -235,11 +235,24 @@ class StudentProgressAPIView(APIView):
         # Calculate XP from logs
         total_xp = XPLog.objects.filter(user=request.user).aggregate(Sum('xp'))['xp__sum'] or 0
 
+        # XP history by month (for XP graph)
+        xp_logs = (
+            XPLog.objects.filter(user=request.user)
+            .annotate(month=TruncMonth('created_at'))
+            .values('month')
+            .annotate(xp=Sum('xp'))
+            .order_by('month')
+        )
+        xp_history = [
+            {"month": x['month'].strftime('%Y-%m'), "xp": x['xp']} for x in xp_logs if x['month']
+        ]
+
         return Response({
             "total_courses": total_lessons,
             "completed_courses": completed_lessons,
             "progress": progress,
             "xp": total_xp,
+            "xp_history": xp_history,
         })
 
 
