@@ -12,11 +12,11 @@ function ProfileCard({
   const safeSkills = Array.isArray(skills) ? skills : [];
 
   return (
-    <div className="profile-card client-profile" style={{ textAlign: "left", paddingBottom: "1rem", }}>
+    <div className="profile-card client-profile" style={{ textAlign: "left", paddingBottom: "1rem", background: "linear-gradient(180deg, rgba(255,159,67,0.03), rgba(255,106,0,0.01))", padding: "18px", borderRadius: "12px" }}>
       {/* Banner / Header Background could go here */}
 
       <div style={{ display: "flex", gap: "20px", alignItems: "flex-start", marginBottom: "24px" }}>
-        <div className="profile-avatar" style={{ width: "80px", height: "80px", margin: 0, border: "none", boxShadow: "0 4px 12px rgba(0,0,0,0.1)" }}>
+        <div className="profile-avatar" style={{ width: "80px", height: "80px", margin: 0, border: "none", boxShadow: "0 8px 20px rgba(255,106,0,0.08)" }}>
           {avatar ? (
             <img
               src={`http://127.0.0.1:8000${avatar}`}
@@ -24,7 +24,7 @@ function ProfileCard({
               style={{ width: "100%", height: "100%", objectFit: "cover" }}
             />
           ) : (
-            <span style={{ fontSize: "2rem" }}>{safeName.charAt(0).toUpperCase()}</span>
+            <span style={{ fontSize: "2rem", color: "var(--primary)" }}>{safeName.charAt(0).toUpperCase()}</span>
           )}
         </div>
 
@@ -47,7 +47,7 @@ function ProfileCard({
         <div className="profile-skills" style={{ justifyContent: "flex-start" }}>
           {safeSkills.length > 0 ? (
             safeSkills.map((skill, index) => (
-              <span key={index} className="skill-chip" style={{ background: "rgba(99, 102, 241, 0.1)", color: "var(--primary)", fontWeight: "600" }}>
+              <span key={index} className="skill-chip" style={{ background: "linear-gradient(90deg, rgba(255,159,67,0.12), rgba(255,106,0,0.08))", color: "var(--primary)", fontWeight: "700", padding: "6px 10px", borderRadius: "999px" }}>
                 {skill}
               </span>
             ))

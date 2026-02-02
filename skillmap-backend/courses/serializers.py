@@ -17,7 +17,7 @@ class LessonSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Lesson
-        fields = ["id", "title", "xp", "completed", "section", "order"]
+        fields = ["id", "title", "xp", "completed", "section", "order", "content"]
 
     def get_completed(self, obj):
         user = self.context["request"].user

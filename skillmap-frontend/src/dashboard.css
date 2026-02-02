@@ -287,13 +287,14 @@
   width: 100px;
   height: 100px;
   border-radius: 50%;
-  background: var(--bg-app);
+  background: linear-gradient(135deg, rgba(255,106,0,0.06), rgba(255,159,67,0.03));
   margin: 0 auto 1.5rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 3px solid var(--primary);
+  border: 3px solid rgba(255,106,0,0.18);
   overflow: hidden;
+  box-shadow: 0 6px 16px rgba(255,106,0,0.08);
 }
 
 .profile-avatar img {
@@ -311,11 +312,12 @@
 }
 
 .skill-chip {
-  background: #f1f5f9;
-  padding: 0.25rem 0.75rem;
+  background: linear-gradient(90deg, rgba(255,159,67,0.12), rgba(255,106,0,0.08));
+  padding: 0.35rem 0.9rem;
   border-radius: 999px;
   font-size: 0.8rem;
-  color: var(--text-muted);
+  color: var(--primary);
+  font-weight: 700;
 }
 
 /* Chatbot */
@@ -376,14 +378,135 @@
   z-index: 9999;
 }
 
+/* Hero */
+.hero {
+  display: flex;
+  gap: 2rem;
+  padding: 1.5rem;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  background: linear-gradient(135deg, rgba(255,106,0,0.14), rgba(255,159,67,0.04));
+  border-radius: 12px;
+  box-shadow: var(--shadow-glow);
+}
+
+.hero-left { flex: 1 }
+.hero-right { width: 320px }
+.hero h1 { margin: 0 0 8px; font-size: 1.6rem }
+.hero .muted { color: var(--text-muted); margin: 0 }
+.hero-stats { display: flex; gap: 1rem; margin-top: 12px }
+.hero-stats .stat { text-align: left }
+
+/* Courses grid */
+.courses-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 12px;
+}
+
+.course-card {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  padding: 12px;
+  border-radius: 12px;
+  background: linear-gradient(180deg, rgba(255,106,0,0.04), rgba(255,159,67,0.01));
+  box-shadow: var(--shadow-sm);
+  border-left: 4px solid rgba(255,106,0,0.12);
+}
+
+.course-card .thumb {
+  width: 60px;
+  height: 60px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  color: white;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+}
+
+.course-card .meta { flex: 1 }
+.course-card .title { font-weight: 700 }
+.course-card .subtitle { font-size: 0.85rem; color: var(--text-muted) }
+.course-card .actions { margin-left: 12px }
+
+.course-progress { margin-top: 10px }
+.progress-bar { background: #f1f5f9; border-radius: 999px; height: 10px; overflow: hidden; width: 100%; border: 1px solid var(--border-light) }
+.progress-fill { height: 100%; transition: width 0.4s cubic-bezier(.2,.8,.2,1) }
+.progress-meta { margin-top: 6px; font-size: 0.8rem; color: var(--text-muted) }
+
+/* Modal */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(2,6,23,0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9998;
+}
+
+.modal {
+  background: linear-gradient(180deg, #fffdf8, #fff7f0);
+  border-radius: 12px;
+  padding: 18px;
+  max-width: 960px;
+  width: 95%;
+  height: 80vh;
+  overflow: hidden;
+  box-shadow: 0 30px 60px rgba(2,6,23,0.28);
+}
+
+/* Course Detail layout */
+.course-detail-grid {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: 18px;
+  height: 100%;
+}
+
+.cd-sidebar {
+  padding: 12px;
+  overflow-y: auto;
+  background: linear-gradient(180deg, rgba(255,255,255,0.6), rgba(255,255,255,0.4));
+  border-radius: 8px;
+}
+
+.cd-content {
+  padding: 12px;
+  overflow-y: auto;
+}
+
+.lesson-list-item {
+  text-align: left;
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.lesson-list-item.active {
+  background: linear-gradient(90deg, rgba(255,106,0,0.08), rgba(255,159,67,0.03));
+  box-shadow: var(--shadow-sm);
+}
+
+.edit-profile-modal .profile-avatar { width: 64px; height: 64px }
+
+/* make Chatbot more subtle */
+.chatbot-circle { box-shadow: 0 8px 20px rgba(99,102,241,0.25) }
+
 .chatbot-panel {
   display: flex;
   flex-direction: column;
   height: 520px;
-  background: white;
+  background: linear-gradient(180deg, rgba(255,106,0,0.02), #fff7f0);
   border-radius: 16px;
   overflow: hidden;
-  box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.08);
 }
 
 .chatbot-header {
@@ -411,14 +534,14 @@
   width: 56px;
   height: 56px;
   border-radius: 50%;
-  background: var(--primary);
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
   color: white;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 1.6rem;
   cursor: pointer;
-  box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+  box-shadow: var(--shadow-glow);
 }
 
 .chat-input {

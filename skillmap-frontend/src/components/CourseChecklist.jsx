@@ -1,16 +1,44 @@
 import { useState, useEffect } from "react";
 import { getCourseStructure, completeLesson } from "../api";
 
-function CourseChecklist({ courseId, onClose, onProgressUpdate }) {
+function CourseChecklist({ courseId, courses, onClose, onProgressUpdate }) {
     const [structure, setStructure] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+
+    const resolvedCourseId = courseId ?? (Array.isArray(courses) && courses.length ? courses[0].id : null);
 
     useEffect(() => {
-        getCourseStructure(courseId)
-            .then(setStructure)
-            .catch((err) => console.error("Failed to load content", err))
+        if (!resolvedCourseId) {
+            setLoading(false);
+            setError("No course selected");
+            setStructure(null);
+            return;
+        }
+
+        setLoading(true);
+        setError(null);
+        getCourseStructure(resolvedCourseId)
+            .then((s) => setStructure(s))
+            .catch((err) => {
+                console.error("Failed to load content", err);
+                setError(err?.message || "Failed to load content");
+            })
             .finally(() => setLoading(false));
-    }, [courseId]);
+    }, [resolvedCourseId]);
+
+    const retry = () => {
+        if (!resolvedCourseId) return;
+        setLoading(true);
+        setError(null);
+        getCourseStructure(resolvedCourseId)
+            .then((s) => setStructure(s))
+            .catch((err) => {
+                console.error("Failed to load content", err);
+                setError(err?.message || "Failed to load content");
+            })
+            .finally(() => setLoading(false));
+    };
 
     const handleLessonComplete = async (lessonId) => {
         try {
@@ -35,7 +63,13 @@ function CourseChecklist({ courseId, onClose, onProgressUpdate }) {
     };
 
     if (loading) return <div className="p-4 text-center">Loading Content...</div>;
-    if (!structure) return <div className="p-4 text-center text-red">Failed to load content.</div>;
+    if (!resolvedCourseId) return <div className="p-4 text-center text-muted">No courses assigned yet.</div>;
+    if (error) return (
+        <div className="p-4 text-center text-red">
+            Failed to load content. <button onClick={retry} className="btn-link">Retry</button>
+        </div>
+    );
+    if (!structure) return <div className="p-4 text-center text-red">No course content available.</div>;
 
     return (
 

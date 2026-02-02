@@ -161,6 +161,12 @@ export function getAdminCourses() {
   });
 }
 
+export function getCourses() {
+  return apiFetch(`${API_BASE}/courses/`, {
+    headers: authHeaders(),
+  });
+}
+
 export function assignCourse(userId, courseId) {
   return apiFetch(`${API_BASE}/admin/assign-course/`, {
     method: "POST",
@@ -241,6 +247,13 @@ export function getCourseStructure(courseId) {
 
 export function completeLesson(lessonId) {
   return apiFetch(`${API_BASE}/courses/lessons/${lessonId}/complete/`, {
+    method: "POST",
+    headers: authHeaders(),
+  });
+}
+
+export function enrollCourse(courseId) {
+  return apiFetch(`${API_BASE}/courses/enroll/${courseId}/`, {
     method: "POST",
     headers: authHeaders(),
   });

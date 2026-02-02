@@ -21,19 +21,27 @@ class MyCoursesAPIView(APIView):
             is_active=True
         ).select_related("course")
 
-        completed_topic_ids = set(
-            TopicProgress.objects.filter(
-                user=request.user,
-                completed=True
-            ).values_list("topic__course_id", flat=True)
-        )
-
         data = []
         for a in assignments:
+            course = a.course
+            # total lessons in the course
+            total_lessons = Lesson.objects.filter(section__course=course).count()
+            # completed lessons for this user in the course
+            completed_lessons = LessonProgress.objects.filter(
+                user=request.user,
+                completed=True,
+                lesson__section__course=course
+            ).count()
+
+            progress = int((completed_lessons / total_lessons) * 100) if total_lessons > 0 else 0
+
             data.append({
-                "id": a.course.id,
-                "title": a.course.title,
-                "completed": a.course.id in completed_topic_ids,
+                "id": course.id,
+                "title": course.title,
+                "completed": (total_lessons > 0 and completed_lessons == total_lessons),
+                "total_lessons": total_lessons,
+                "completed_lessons": completed_lessons,
+                "progress": progress,
             })
 
         return Response(data)
@@ -266,5 +274,24 @@ class CourseContentAPIView(APIView):
             # Pass context for get_completed method in LessonSerializer
             serializer = CourseSerializer(course, context={"request": request})
             return Response(serializer.data)
+        except Course.DoesNotExist:
+            return Response({"error": "Course not found"}, status=404)
+
+
+class EnrollCourseAPIView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, course_id):
+        try:
+            course = Course.objects.get(id=course_id, is_active=True)
+            assignment, created = CourseAssignment.objects.get_or_create(
+                user=request.user,
+                course=course,
+            )
+            if not created and assignment.is_active:
+                return Response({"message": "Already enrolled"})
+            assignment.is_active = True
+            assignment.save()
+            return Response({"message": "Enrolled successfully"}, status=201)
         except Course.DoesNotExist:
             return Response({"error": "Course not found"}, status=404)

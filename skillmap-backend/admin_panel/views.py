@@ -176,7 +176,7 @@ class AdminUsersProgressAPIView(APIView):
                 "username": user.username,
                 "email": user.email,
                 "progress": min(progress, 100),
-                "courses": courses,   # empty list if none
+                "courses": courses,  
             })
 
         return Response(users_data)
