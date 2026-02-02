@@ -1,12 +1,6 @@
 from rest_framework import serializers
 from .models import Course, CourseAssignment,Lesson, LessonProgress, Section
 
-class CourseSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Course
-        fields = ["id", "title", "description"]
-
-
 class CourseAssignmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = CourseAssignment
@@ -20,7 +14,10 @@ class LessonSerializer(serializers.ModelSerializer):
         fields = ["id", "title", "xp", "completed", "section", "order", "content"]
 
     def get_completed(self, obj):
-        user = self.context["request"].user
+        request = self.context.get("request")
+        if not request or getattr(request, "user", None) is None or request.user.is_anonymous:
+            return False
+        user = request.user
         return LessonProgress.objects.filter(
             user=user, lesson=obj, completed=True
         ).exists()

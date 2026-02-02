@@ -49,13 +49,20 @@ class MyCoursesAPIView(APIView):
 # ============================
 # ADMIN: LIST ALL COURSES
 # ============================
+import logging
+logger = logging.getLogger(__name__)
+
 class CourseListAPIView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
         courses = Course.objects.all()
-        serializer = CourseSerializer(courses, many=True)
-        return Response(serializer.data)
+        try:
+            serializer = CourseSerializer(courses, many=True, context={"request": request})
+            return Response(serializer.data)
+        except Exception as e:
+            logger.exception("Failed to serialize courses")
+            return Response({"error": "Failed to serialize courses"}, status=500)
 
 
        

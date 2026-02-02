@@ -55,6 +55,22 @@
   font-size: 1.1rem;
 }
 
+/* Action group ensures buttons wrap and stay aligned */
+.action-group {
+  display: flex;
+  gap: 0.6rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+/* Small button variant used across admin lists */
+.btn-sm {
+  padding: 0.35rem 0.8rem;
+  font-size: 0.82rem;
+  border-radius: 10px;
+}
+
+
 @media (max-width: 900px) {
   .modern-grid {
     grid-template-columns: 1fr;

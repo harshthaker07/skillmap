@@ -150,6 +150,7 @@ function Dashboard({ onLogout }) {
               <div className="courses-grid">
                 {courses.map((c) => (
                   <div key={c.id} className="course-card">
+                    <div className="progress-badge">{c.progress || 0}%</div>
                     <div className="thumb">{c.title.charAt(0)}</div>
                     <div className="meta">
                       <div className="title">{c.title}</div>

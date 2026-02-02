@@ -276,9 +276,9 @@ function AdminDashboard({ onLogout }) {
               {courses.map((c) => (
                 <li key={c.id} className="modern-list-item">
                   <span className="modern-course-title">{c.title}</span>
-                  <div>
-                    <button className="btn btn-primary btn-sm" style={{ marginRight: 8 }} onClick={() => setManagingCourseId(c.id)}>Manage Content</button>
-                    <button className="btn btn-secondary btn-sm" style={{ marginRight: 8 }} onClick={() => openEditCourse(c)}>Edit</button>
+                  <div className="action-group">
+                    <button className="btn btn-primary btn-sm" onClick={() => setManagingCourseId(c.id)}>Manage Content</button>
+                    <button className="btn btn-secondary btn-sm" onClick={() => openEditCourse(c)}>Edit</button>
                     <button
                       className="btn btn-danger btn-sm"
                       onClick={() => handleRemoveCourse(c.id)}
